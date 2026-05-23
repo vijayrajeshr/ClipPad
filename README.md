@@ -38,32 +38,27 @@ Never lose track of important snippets, reference links, or notes again.
 - **Local-First Privacy**  
   All data is stored securely within your browser's local storage. No external servers, no telemetry.
 
-## Getting Started
+## Getting Started (Local Setup)
 
-### 📦 For Users (Chrome Installation)
-
-Install and use ClipPad as your daily clipboard manager:
-
-1. Download the latest release `.zip` from the [Releases](https://github.com/vijayrajeshr/ClipPad/releases) page and extract it to a secure folder on your computer.
-2. Open Google Chrome and navigate to the extensions dashboard:
-   ```text
-   chrome://extensions/
-   ```
-3. Enable **Developer mode** via the toggle in the top right corner.
-4. Click **Load unpacked** and select the folder where you extracted ClipPad.
-5. *Tip:* Click the puzzle piece icon in Chrome to **Pin** the extension to your toolbar. You can now use `Ctrl+Shift+K` (or `Cmd+Shift+K` on Mac) to instantly toggle the side panel!
-
-### 💻 For Developers (Local Setup)
-
-Want to dive into the code, add new features, or tweak the design?
+> **Note:** ClipPad is not yet published to the Chrome Web Store. You can easily install and run it locally by following these instructions.
 
 1. Clone this repository directly to your machine:
    ```bash
    git clone https://github.com/vijayrajeshr/ClipPad.git
    ```
-2. Open the project in your preferred code editor (e.g., VS Code).
-3. Follow steps 2-4 from above to load the extension via `chrome://extensions/`, pointing it to your cloned Git directory.
-4. Whenever you make code changes, click the **Refresh (↺)** icon on the ClipPad card in your extensions page to reload your updates.
+
+2. Open Google Chrome and navigate to the extensions dashboard:
+   ```text
+   chrome://extensions/
+   ```
+
+3. Enable **Developer mode** via the toggle in the top right corner.
+
+4. Click **Load unpacked** and select the cloned `ClipPad` folder from your machine.
+
+5. *Tip:* Click the puzzle piece icon in Chrome to **Pin** the extension to your toolbar. You can now use `Ctrl+Shift+K` (or `Cmd+Shift+K` on Mac) to instantly toggle the side panel!
+
+*(For Developers)*: Whenever you make code changes, simply click the **Refresh (↺)** icon on the ClipPad card in your extensions page to hot-reload your updates.
 
 ## Usage
 
