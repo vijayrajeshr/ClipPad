@@ -3,29 +3,39 @@
   "name": "ClipPad",
   "version": "1.0.0",
   "description": "Professional, local-first contextual clipboard with immutable pinning architecture.",
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "permissions": [
     "clipboardRead",
     "storage",
     "activeTab",
     "tabs",
-    "sidePanel"
+    "sidePanel",
+    "scripting"
   ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "icons": {
-    "128": "icons/icon.png"
+    "16": "icons/icon_16.png",
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
   },
   "action": {
-    "default_icon": "icons/icon.png",
+    "default_icon": {
+      "16": "icons/icon_16.png",
+      "48": "icons/icon_48.png",
+      "128": "icons/icon_128.png"
+    },
     "default_title": "ClipPad"
   },
   "side_panel": {
     "default_path": "sidepanel.html"
   },
   "commands": {
-    "toggle_side_panel": {
+    "_execute_side_panel": {
       "suggested_key": {
         "default": "Ctrl+Shift+K",
         "mac": "Command+Shift+K"

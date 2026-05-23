@@ -21,11 +21,13 @@ async function renderHistory(filterText = "") {
   
   clipList.innerHTML = "";
   const query = filterText.toLowerCase();
+  const history = data.clipboardHistory || [];
 
-  const filteredHistory = data.clipboardHistory.filter(clip => 
-    clip.content.toLowerCase().includes(query) || 
-    (clip.meta.pageTitle && clip.meta.pageTitle.toLowerCase().includes(query))
-  );
+  const filteredHistory = history.filter(clip => {
+    const content = clip.content || "";
+    const title = (clip.meta && clip.meta.pageTitle) || "";
+    return content.toLowerCase().includes(query) || title.toLowerCase().includes(query);
+  });
 
   if (filteredHistory.length === 0) {
     clipList.innerHTML = `
@@ -63,13 +65,13 @@ async function renderHistory(filterText = "") {
       : `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 15.5L7 13.5M10.5 9L15 4.5M15 4.5C16.5 4.5 17.5 5.5 17.5 7L13 11.5L15 13.5L17.5 14L19.5 12C20 11.5 20 10.5 19.5 9.5L14.5 4.5C13.5 4 12.5 4 12 4.5L10 6.5L10.5 9L15 4.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16.5L4 22M10 16.5L8.5 18M10 16.5L13.5 19L14 16.5L11.5 14M11.5 14L9 10.5L6.5 10L9 12.5L11.5 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
     card.innerHTML = `
-      <div class="clip-body">${escapeHTML(clip.content)}</div>
+      <div class="clip-body">${escapeHTML(clip.content || "")}</div>
       <div class="clip-footer">
-        <a href="${clip.meta.sourceUrl}" target="_blank" class="source-link" title="${escapeHTML(clip.meta.pageTitle || "Webpage")}">
+        <a href="${clip.meta?.sourceUrl || "#"}" target="_blank" class="source-link" title="${escapeHTML(clip.meta?.pageTitle || "Webpage")}">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.8284 10.1716L10.1716 13.8284M10.1716 13.8284C9.40018 14.5998 8.14986 14.5998 7.37845 13.8284C6.60703 13.057 6.60703 11.8067 7.37845 11.0353L11.6211 6.79264C12.3925 6.02122 13.6428 6.02122 14.4142 6.79264C15.1857 7.56405 15.1857 8.81437 14.4142 9.58579M10.1716 13.8284L5.92893 18.0711C5.15751 18.8425 3.9072 18.8425 3.13579 18.0711C2.36437 17.2996 2.36437 16.0493 3.13579 15.2779L7.37845 11.0353M13.8284 10.1716C14.5998 9.40018 15.8501 9.40018 16.6216 10.1716C17.393 10.943 17.393 12.1933 16.6216 12.9647L12.3789 17.2074C11.6075 17.9788 10.3572 17.9788 9.58579 17.2074M13.8284 10.1716L18.0711 5.92893C18.8425 5.15751 20.0928 5.15751 20.8642 5.92893C21.6356 6.70034 21.6356 7.95066 20.8642 8.72208L16.6216 12.9647" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>${escapeHTML(clip.meta.pageTitle || "Webpage")}</span>
+          <span>${escapeHTML(clip.meta?.pageTitle || "Webpage")}</span>
         </a>
         <div class="actions">
           <button class="btn-action btn-lock ${clip.isLocked ? 'active' : ''}" data-id="${clip.id}" title="${clip.isLocked ? 'Unpin' : 'Pin'}">
@@ -93,10 +95,10 @@ async function renderHistory(filterText = "") {
     const copyBtn = card.querySelector(".btn-copy");
     copyBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      copyToClipboard(clip.content, copyBtn);
+      copyToClipboard(clip.content || "", copyBtn);
     });
 
-    card.addEventListener("click", () => copyToClipboard(clip.content, copyBtn));
+    card.addEventListener("click", () => copyToClipboard(clip.content || "", copyBtn));
 
     clipList.appendChild(card);
   });
@@ -104,13 +106,22 @@ async function renderHistory(filterText = "") {
 
 async function toggleLock(clipId) {
   const data = await chrome.storage.local.get({ clipboardHistory: [] });
-  const updatedHistory = data.clipboardHistory.map(clip => {
+  let history = data.clipboardHistory || [];
+  
+  history = history.map(clip => {
     if (clip.id === clipId) {
       return { ...clip, isLocked: !clip.isLocked };
     }
     return clip;
   });
-  await chrome.storage.local.set({ clipboardHistory: updatedHistory });
+
+  // Enforce consistent sorting even when pinning/unpinning directly from UI
+  history.sort((a, b) => {
+    if (a.isLocked === b.isLocked) return b.timestamp - a.timestamp;
+    return a.isLocked ? -1 : 1;
+  });
+
+  await chrome.storage.local.set({ clipboardHistory: history });
   renderHistory(document.getElementById("searchBar").value);
 }
 
@@ -125,10 +136,13 @@ function copyToClipboard(text, btnElement) {
         btnElement.classList.remove('copied');
       }, 1500);
     }
+  }).catch(err => {
+    console.error("Clipboard write failed:", err);
   });
 }
 
 function escapeHTML(str) {
+  if (!str) return "";
   return str.replace(/[&<>'"]/g, 
     tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
   );
