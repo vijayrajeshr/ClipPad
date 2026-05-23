@@ -21,8 +21,6 @@ ClipPad is a modern, elegantly designed clipboard manager built directly into yo
 
 Never lose track of important snippets, reference links, or notes again.
 
-> **Note:** To truly make this README "animative", it is highly recommended to record a short, 5-second GIF of the extension in use (showing the slide-up card animations and hover effects) and place it right here.
-
 ## Features
 
 - **Contextual Capture**  
