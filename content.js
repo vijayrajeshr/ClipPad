@@ -1,10 +1,16 @@
 document.addEventListener("copy", () => {
-  // Let the system finish copying data, then extract it cleanly
-  setTimeout(async () => {
+  // Immediately grab the active selection text
+  const selectedText = window.getSelection().toString().trim();
+  if (!selectedText) return;
+
+  // Wait a tiny bit (10ms) to ensure the system clipboard action completes without blocking
+  setTimeout(() => {
     try {
-      const selectedText = window.getSelection().toString().trim();
-      
-      if (!selectedText) return;
+      // Check if the extension was updated and context invalidated (prevents the Chrome error)
+      if (!chrome.runtime?.id) {
+        console.warn("ClipPad context invalidated. Please refresh the page.");
+        return;
+      }
 
       // Send structured payload to background worker
       chrome.runtime.sendMessage({
@@ -17,7 +23,10 @@ document.addEventListener("copy", () => {
         }
       });
     } catch (err) {
-      console.error("ClipPad failed to capture clipboard payload safely:", err);
+      // Suppress known invalidation error, log others
+      if (!err.message.includes("Extension context invalidated")) {
+        console.error("ClipPad failed to capture payload:", err);
+      }
     }
-  }, 100);
+  }, 10);
 });
