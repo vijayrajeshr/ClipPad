@@ -8,15 +8,6 @@
   <br />
 
   <p>
-    <a href="https://github.com/vijayrajeshr/ClipPad/stargazers">
-      <img src="https://img.shields.io/github/stars/vijayrajeshr/ClipPad?style=for-the-badge&color=A855F7&labelColor=18181B" alt="Stars" />
-    </a>
-    <a href="https://github.com/vijayrajeshr/ClipPad/network/members">
-      <img src="https://img.shields.io/github/forks/vijayrajeshr/ClipPad?style=for-the-badge&color=3B82F6&labelColor=18181B" alt="Forks" />
-    </a>
-  </p>
-
-  <p>
     <a href="#features">Features</a> •
     <a href="#installation">Installation</a> •
     <a href="#usage">Usage</a> •
@@ -49,25 +40,32 @@ Never lose track of important snippets, reference links, or notes again.
 - **Local-First Privacy**  
   All data is stored securely within your browser's local storage. No external servers, no telemetry.
 
-## Installation
+## Getting Started
 
-ClipPad is currently available for manual installation in Chrome and Chromium-based browsers.
+### 📦 For Users (Chrome Installation)
 
-1. Clone or download this repository:
-   ```bash
-   git clone https://github.com/vijayrajeshr/ClipPad.git
-   ```
+Install and use ClipPad as your daily clipboard manager:
 
-2. Open Google Chrome and navigate to your extensions page:
+1. Download the latest release `.zip` from the [Releases](https://github.com/vijayrajeshr/ClipPad/releases) page and extract it to a secure folder on your computer.
+2. Open Google Chrome and navigate to the extensions dashboard:
    ```text
    chrome://extensions/
    ```
+3. Enable **Developer mode** via the toggle in the top right corner.
+4. Click **Load unpacked** and select the folder where you extracted ClipPad.
+5. *Tip:* Click the puzzle piece icon in Chrome to **Pin** the extension to your toolbar. You can now use `Ctrl+Shift+K` (or `Cmd+Shift+K` on Mac) to instantly toggle the side panel!
 
-3. Enable **Developer mode** using the toggle in the top right corner.
+### 💻 For Developers (Local Setup)
 
-4. Click **Load unpacked** and select the directory where you cloned the `ClipPad` repository.
+Want to dive into the code, add new features, or tweak the design?
 
-5. *Tip:* Pin the extension to your toolbar and use the shortcut `Ctrl+Shift+K` (or `Cmd+Shift+K` on macOS) to instantly toggle the side panel from any tab.
+1. Clone this repository directly to your machine:
+   ```bash
+   git clone https://github.com/vijayrajeshr/ClipPad.git
+   ```
+2. Open the project in your preferred code editor (e.g., VS Code).
+3. Follow steps 2-4 from above to load the extension via `chrome://extensions/`, pointing it to your cloned Git directory.
+4. Whenever you make code changes, click the **Refresh (↺)** icon on the ClipPad card in your extensions page to reload your updates.
 
 ## Usage
 
